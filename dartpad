@@ -1,0 +1,184 @@
+import 'dart:async';
+
+
+abstract class ElectronicDevice {
+  void bootUp();
+}
+
+
+abstract class Cellphone extends ElectronicDevice {
+  String _speaker;
+  String camera;
+  String keyboard;
+
+  Cellphone({
+    required String speaker,
+    required this.camera,
+    required this.keyboard,
+  }) : _speaker = speaker;
+
+  String get speaker => _speaker;
+
+  set speaker(String newSpeaker) {
+    if (newSpeaker.trim().isNotEmpty) {
+      _speaker = newSpeaker;
+    } else {
+      print('Error: Speaker description cannot be empty.');
+    }
+  }
+
+  void tookAPhoto() {
+    print('Camera ($camera): Took a standard photo.');
+  }
+
+  void sendMessage(String message) {
+    print('Keyboard ($keyboard): Sent message -> "$message"');
+  }
+
+  void playsAMusic(String song) {
+    print('Speaker ($_speaker): Playing audio -> "$song"');
+  }
+
+  void executeAllBehaviors(String message, String song) {
+    tookAPhoto();
+    sendMessage(message);
+    playsAMusic(song);
+  }
+
+
+  Future<String> downloadSoftwareUpdate() async {
+    print('   [ASYNC START] Connecting to server for update...');
+    await Future.delayed(const Duration(seconds: 2));
+    return '   [ASYNC COMPLETE] Firmware v11.0 update downloaded and installed!';
+  }
+}
+
+
+mixin WirelessCharging {
+  void chargeWirelessly() {
+    print('Wireless Charging: Fast charging on induction pad at 15W...');
+  }
+}
+
+
+class Smartphone extends Cellphone with WirelessCharging {
+  double screenSize;
+
+  Smartphone({
+    required String speaker,
+    required String camera,
+    required String keyboard,
+    required this.screenSize,
+  }) : super(speaker: speaker, camera: camera, keyboard: keyboard);
+
+  void bootUp() {
+    print('OS Boot: Initializing Smart OS on $screenSize-inch AMOLED display...');
+  }
+
+  void tookAPhoto() {
+    print('Camera ($camera): Captured 4K Ultra-HD photo with AI HDR!');
+  }
+
+  void playsAMusic(String song) {
+    print('Speaker ($speaker): Streaming Dolby Atmos Lossless Audio -> "$song"');
+  }
+
+  Future<String> syncCloudBackup() async {
+    print('   [ASYNC START] Backing up phone photos to Cloud...');
+    await Future.delayed(const Duration(seconds: 2));
+    return '   [ASYNC COMPLETE] Cloud Backup Successful: 15 GB synced!';
+  }
+}
+
+
+class FeaturePhone extends Cellphone {
+  bool hasFMCard;
+
+  FeaturePhone({
+    required String speaker,
+    required String camera,
+    required String keyboard,
+    required this.hasFMCard,
+  }) : super(speaker: speaker, camera: camera, keyboard: keyboard);
+
+  void bootUp() {
+    print('OS Boot: Powering on retro firmware system...');
+  }
+
+  void tookAPhoto() {
+    print('Camera ($camera): Captured 0.3MP VGA snapshot.');
+  }
+
+  void playsAMusic(String song) {
+    print('Speaker ($speaker): Playing 8-bit Polyphonic ringtone -> "$song"');
+  }
+}
+
+void main() async {
+  print('================================================================');
+  print('   PC16 WEEK 11 - ASYNCHRONOUS OOP CELLPHONE APPLICATION        ');
+  print('================================================================\n');
+
+  Smartphone phone1 = Smartphone(
+    speaker: 'Stereo Dual Speakers',
+    camera: '200 MP Quad Camera',
+    keyboard: 'On-Screen Touch QWERTY',
+    screenSize: 6.7,
+  );
+
+  FeaturePhone phone2 = FeaturePhone(
+    speaker: 'Mono Rear Speaker',
+    camera: 'VGA Camera',
+    keyboard: 'Physical T9 Keypad',
+    hasFMCard: true,
+  );
+
+  List<Cellphone> phoneList = [phone1, phone2];
+  Map<String, Cellphone> phoneMap = {
+    'SMART-01': phone1,
+    'FEAT-01': phone2,
+  };
+
+  print('--- DEMO 1: Synchronous OOP Execution (List Iteration) ---');
+  for (int i = 0; i < phoneList.length; i++) {
+    Cellphone currentPhone = phoneList[i];
+    print('\n--- Cellphone Unit ${i + 1} [${currentPhone.runtimeType}] ---');
+
+    currentPhone.bootUp();
+    currentPhone.executeAllBehaviors(
+      'Hello from Unit ${i + 1}!',
+      'Track #${i + 1}',
+    );
+
+    if (currentPhone is WirelessCharging) {
+      (currentPhone as WirelessCharging).chargeWirelessly();
+    }
+  }
+
+  print('\n----------------------------------------------------------------');
+  print('--- DEMO 2: Map Storage & Encapsulation Update ---');
+  phoneMap['SMART-01']?.speaker = 'Harman Kardon Quad Speakers';
+  print('Updated Speaker for SMART-01 via Map: ${phoneMap['SMART-01']?.speaker}');
+
+  print('\n----------------------------------------------------------------');
+  print('--- DEMO 3: Asynchronous Operation (downloadSoftwareUpdate) ---');
+
+  print('\n1. Initiating software update for Smartphone...');
+  Future<String> updateTask = phone1.downloadSoftwareUpdate();
+
+  print('2. IMMEDIATE ACTION: App remains responsive while update runs in background!');
+
+  String updateResult = await updateTask;
+  print('3. RESOLVED RESULT:\n$updateResult');
+
+  print('\n----------------------------------------------------------------');
+  print('--- DEMO 4: Subclass Asynchronous Method (syncCloudBackup) ---');
+
+  print('\n1. Starting Cloud Sync for Smartphone...');
+  print('2. IMMEDIATE ACTION: Processing other tasks during cloud upload...');
+
+  String cloudResult = await phone1.syncCloudBackup();
+  print('3. RESOLVED RESULT:\n$cloudResult');
+
+  print('\n================================================================');
+}
