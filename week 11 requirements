@@ -1,0 +1,30 @@
+[NEW WEEK 11 REQUIREMENT #1Future-Returning Async Method
+Future<String> downloadSoftwareUpdate() async {
+    print('   [ASYNC TASK STARTED] Connecting to server for update...');
+
+NEW WEEK 11 REQUIREMENT #2Simulated Delay (Future.delayed)
+await Future.delayed(const Duration(seconds: 2));
+
+    return '   [ASYNC TASK COMPLETED] Firmware v11.0 update downloaded and installed!';
+  }
+}
+
+WEEK 11 REQUIREMENT #1 (Subclass) Future-Returning Async Method
+Future<String> syncCloudBackup() async {
+    print('   [ASYNC TASK STARTED] Backing up phone photos to Cloud...');
+
+WEEK 11 REQUIREMENT #2 2-Second Simulated Delay
+await Future.delayed(const Duration(seconds: 2));
+
+    return '   [ASYNC TASK COMPLETED] Cloud Backup Successful: 15 GB synced!';
+  }
+}
+
+WEEK 11 REQUIREMENT #3 main() Marked 'async'
+void main() async {
+
+WEEK 11 REQUIREMENT #4 Non-Blocking Execution Proof
+print('2. PROOF OF NON-BLOCKING: This line prints IMMEDIATELY while the update downloads in background!');
+
+WEEK 11 REQUIREMENT #5: Called using 'await'
+String updateResult = await updateTask;
