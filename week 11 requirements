@@ -1,4 +1,4 @@
-[NEW WEEK 11 REQUIREMENT #1Future-Returning Async Method
+NEW WEEK 11 REQUIREMENT #1 Future-Returning Async Method
 Future<String> downloadSoftwareUpdate() async {
     print('   [ASYNC TASK STARTED] Connecting to server for update...');
 
